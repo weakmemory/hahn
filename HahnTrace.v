@@ -394,8 +394,8 @@ Proof.
       do 2 f_equal.
       eapply filterP_map_seq_eq; simpl; eauto.
       ins; forward apply (l0 (length l + i)); desf; try lia.
-        by rewrite minus_plus.
-      ins; eapply l1 in H; lia.
+      2: ins; eapply l1 in H; lia.
+      replace (length l + i - length l) with i; ins; lia.
     - eapply map_trace_prepend_lt with (fl := fl) in l2; desf.
       rewrite l4, filterP_app, appA; clear l4.
       f_equal.

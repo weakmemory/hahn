@@ -1,4 +1,5 @@
-Require Import NPeano Arith micromega.Lia Setoid HahnBase.
+Require Import Arith micromega.Lia Setoid HahnBase.
+Require Import PeanoNat.
 
 Lemma div2_add_double n m :
   Nat.div2 (2 * n + m) = n + Nat.div2 m.
@@ -36,15 +37,17 @@ Qed.
 
 Lemma arith_sum_le_mono n m (L : n <= m) : arith_sum n <= arith_sum m.
 Proof.
-  apply le_plus_minus in L; rewrite L; clear L; generalize (m - n) as k; ins.
-  rewrite Nat.add_comm; induction k; ins.
+  apply Nat.sub_add in L; rewrite <- L; clear L.
+  generalize (m - n) as k; ins.
+  induction k; ins.
   rewrite arith_sum_S; lia.
 Qed.
 
 Lemma arith_sum_lt n m (L : n < m) : arith_sum n + n < arith_sum m.
 Proof.
-  apply le_plus_minus in L; rewrite L; clear L; generalize (m - S n) as k; intros.
-  replace (S n + k) with (S (n + k)) by done.
+  apply Nat.sub_add in L; rewrite <- L; clear L.
+  generalize (m - S n) as k; intros.
+  replace (k + S n) with (S (n + k)) by lia.
   rewrite arith_sum_S.
   forward apply (arith_sum_le_mono n (n + k)); lia.
 Qed.

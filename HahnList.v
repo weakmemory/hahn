@@ -1136,7 +1136,9 @@ Lemma mk_listE n A (f: nat -> A) :
 Proof.
   induction n; ins; rewrite IHn.
   rewrite seq_split with (x:=n) (y:=S n); try lia.
-  by rewrite map_app, plus_0_r, <- minus_Sn_m, minus_diag.
+  rewrite map_app.
+  rewrite Nat.add_0_r.
+  replace (S n - n) with 1 by lia; ins.
 Qed.
 
 Lemma in_mk_list_iff A (x: A) n f :
@@ -1160,7 +1162,9 @@ Proof.
   induction n; ins; desf; rewrite app_nth; desf;
   rewrite mk_list_length in *; desf; try lia.
     apply nth_overflow; ins; lia.
-  by assert (i = n) by lia; desf; rewrite minus_diag.
+  assert (i = n) by lia; desf.
+  replace (n - n) with 0 by lia.
+  ins.
 Qed.
 
 Definition length_mk_list := mk_list_length.
@@ -1182,7 +1186,8 @@ Fixpoint max_of_list l :=
 Lemma max_of_list_app l l' :
   max_of_list (l ++ l') = max (max_of_list l) (max_of_list l').
 Proof.
-  by induction l; ins; rewrite IHl, Max.max_assoc.
+  induction l; ins; rewrite IHl.
+  lia.
 Qed.
 
 (** Miscellaneous *)

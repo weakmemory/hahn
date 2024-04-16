@@ -30,13 +30,16 @@
   # coqproject = "_CoqProject";
 
   ## select an entry to build in the following `bundles` set
-  default-bundle = "8.18";
+  default-bundle = "8.19";
 
   bundles."8.17" = {
     coqPackages.coq.override.version = "8.17";
   };
   bundles."8.18" = {
     coqPackages.coq.override.version = "8.18";
+  };
+  bundles."8.19" = {
+    coqPackages.coq.override.version = "8.19";
   };
 
   ## Cachix caches to use in CI

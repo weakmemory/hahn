@@ -86,12 +86,13 @@ Proof.
   {
     clear - R1; intros; desc.
     revert L0.
-    rewrite (le_plus_minus _ _ L); generalize (j - S i) as k.
+    rewrite <- (Nat.sub_add _ _ L).
+    generalize (j - S i) as k.
     revert R1; generalize (2 * n + 1) as m; ins.
     induction k; rewrite ?Nat.add_0_r; vauto.
       apply t_step, R1; lia.
     eapply t_trans, t_step; [apply IHk; lia|].
-    rewrite Nat.add_succ_r; apply R1; lia.
+    rewrite !Nat.add_succ_r. ins. apply R1. lia.
   }
   tertium_non_datur (exists i j, i < j <= n /\ f (2 * i) = f (2 * j)) as [C|C];
     desc.
@@ -121,9 +122,11 @@ Proof.
       apply powE; exists f; splits; ins; eapply R1; lia.
     assert (L: r ^^ (2 * n + 1 - 2 * x) (f (2 * x)) (f (S (2 * n)))).
     { apply powE; exists (fun n => f (2 * x + n)); rewrite ?Nat.add_0_r.
-      rewrite le_plus_minus_r; splits; intros; try done; try lia.
-      f_equal; lia.
-      rewrite Nat.add_succ_r; apply R1; lia. }
+      splits; auto.
+      { ins. f_equal. lia. }
+      intros.
+      replace (2 * x + S i) with (S (2 * x + i)) by lia.
+      apply R1; lia. }
     rewrite <- Nat.add_succ_l, <- Nat.add_1_r.
     do 2 hahn_rewrite pow_add; unfold seq; repeat eexists; eauto.
   }
@@ -132,8 +135,10 @@ Proof.
   - edestruct IRR.
     exists (2 * x0 - 2 * x); split; try lia.
     eexists; split; [apply powE|edone].
-    exists (fun n => f (n + 2 * x)); splits; intros;
-      try (f_equal; lia); apply R1; lia.
+    exists (fun n => f (n + 2 * x)); splits; intros.
+    all: try (f_equal; lia).
+    ins. apply R1.
+    lia.
 Qed.
 
 Lemma ct_bounded_n_total A s (r : relation A) (ACYC: acyclic r)
