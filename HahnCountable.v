@@ -22,7 +22,10 @@ Lemma findP_spec A (cond : A -> Prop) (l : list A)
   forall j, j < findP cond l -> ~ cond (nth j l d).
 Proof.
   induction l; ins; desf; splits; ins; desf; try lia; intuition.
-  eauto using PeanoNat.lt_S_n.
+  match goal with
+  | H' : S ?n < S _, H : forall x, _ |- _ => apply (H n); auto
+  end.
+  lia.
 Qed.
 
 Lemma exists_min (cond : nat -> Prop) (H: exists n, cond n) :

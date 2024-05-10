@@ -33,12 +33,15 @@
   default-bundle = "8.19";
 
   bundles."8.17" = {
+    push-branches = [ "**" ];
     coqPackages.coq.override.version = "8.17";
   };
   bundles."8.18" = {
+    push-branches = [ "**" ];
     coqPackages.coq.override.version = "8.18";
   };
   bundles."8.19" = {
+    push-branches = [ "**" ];
     coqPackages.coq.override.version = "8.19";
   };
 
